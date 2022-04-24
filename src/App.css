@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.btn {
+  border-radius: 4px;
+  padding: 4px;
+  width: 160px;
+  height: 40px;
+  border: 1px solid black;
+  background: antiquewhite;
+}
+
+.bal {
+  border: 1px solid #cccccc;
+  padding: 1% 5%;
+  border-radius: 12px;
+  background: rgba(72 176 226 / 10%);
+}

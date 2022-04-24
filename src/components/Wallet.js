@@ -1,45 +1,74 @@
 import React from 'react'
-import { useEthers, useEtherBalance } from '@usedapp/core'
+import { useEthers, useEtherBalance, Rinkeby, Kovan, Mainnet } from '@usedapp/core'
 import { formatEther } from '@ethersproject/units'
+
+
+const changeBackground = e => {
+    e.target.style.background = 'chocolate';
+}
+const resetBackground = e => {
+    e.target.style.background = 'antiquewhite';
+}
+
 
 const Wallet = () => {
 
-    // If you need to use another connector than a browser wallet,
-    // use the 'activate' method from useEthers.
-    const { activateBrowserWallet, account } = useEthers()
-    const etherBalance = useEtherBalance(account)
+    const { activateBrowserWallet, account, deactivate } = useEthers()
+    const rinkebyBalance = useEtherBalance(account, { chainId: Rinkeby.chainId })
+    const kovanBalance = useEtherBalance(account, { chainId: Kovan.chainId })
+    const mainnetBalance = useEtherBalance(account, { chainId: Mainnet.chainId })
 
-    function changeBackground(e) {
-        e.target.style.background = 'chocolate';
-    }
-    function resetBackground(e) {
-        e.target.style.background = 'antiquewhite';
-    }
 
     return (
         <div>
-            <h3>Wallet</h3>
-            {account
-                ? <div>
-                    <p>Your account: {account}</p>
-                    {
-                        etherBalance && <p>Balance: {formatEther(etherBalance)}</p>
-                    }
-                </div>
-                : <button onClick={() => activateBrowserWallet()}
-                    style={{
-                        borderRadius: '4px',
-                        padding: '4px',
-                        width: '160px',
-                        height: '40px',
-                        border: '1px solid black',
-                        background: 'antiquewhite'
-                    }}
-                    onMouseOver={changeBackground}
-                    onMouseLeave={resetBackground}
-                >
-                    Connect Wallet
-                </button>
+            <h3>
+                dApp Wallet
+            </h3>
+            {
+                account
+                    ?
+                    <div>
+                        <p>Your account: {account}</p> <br />
+                        <button onClick={deactivate} className="btn" onMouseOver={changeBackground} onMouseOut={resetBackground}>
+                            Disconnect
+                        </button>
+                        <hr />
+                        {/* Display wallet balance */}
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px 20px' }}>
+                            {
+                                rinkebyBalance &&
+                                <div className="bal">
+                                    <h4>Rinkeby Balance</h4>
+                                    {formatEther(rinkebyBalance)}
+                                </div>
+                            }
+                            {
+                                kovanBalance &&
+                                <div className="bal" >
+                                    <h4>Kovan Balance</h4>
+                                    {formatEther(kovanBalance)}
+                                </div>
+                            }
+                            {
+                                mainnetBalance &&
+                                <div className="bal">
+                                    <h4>Mainnet Balance</h4>
+                                    {formatEther(mainnetBalance)}
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    : <p>
+                        Please connect wallet. <br />
+                        <button
+                            onClick={() => activateBrowserWallet()}
+                            className="btn"
+                            onMouseOver={changeBackground}
+                            onMouseOut={resetBackground}
+                        >
+                            Connect Wallet
+                        </button>
+                    </p>
             }
 
 
